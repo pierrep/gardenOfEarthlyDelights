@@ -1,0 +1,4 @@
+ofxTraerPhysics
+ofxThreadedImageLoader
+ofxPngSequencePlayer
+ofxVideoRecorder
