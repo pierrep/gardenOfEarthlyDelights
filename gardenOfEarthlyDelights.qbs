@@ -16,6 +16,8 @@ Project{
             'src/Data.h',
             'src/Node.cpp',
             'src/Node.h',
+            'src/Vine.cpp',
+            'src/Vine.h',
             'src/main.cpp',
             'src/ofApp.cpp',
             'src/ofApp.h',
@@ -24,8 +26,8 @@ Project{
         of.addons: [
             'ofxTraerPhysics',
             'ofxThreadedImageLoader',
-            'ofxPngSequencePlayer',
             'ofxVideoRecorder',
+            'ofxVideoBufferPlayer',
         ]
 
         // additional flags for the project. the of module sets some

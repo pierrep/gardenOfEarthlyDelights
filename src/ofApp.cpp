@@ -8,6 +8,7 @@ void ofApp::exit() {
 //--------------------------------------------------------------
 void ofApp::setup(){
 
+   // ofSetFrameRate(3);
     ofBackground(255);
     width = ofGetWidth();
     height = ofGetHeight();
@@ -20,6 +21,10 @@ void ofApp::setup(){
     data = shared_ptr<Data>(new Data());
     data->load();
 
+    ofDisableArbTex();
+    leaf.load("leaves/leaf2.png");
+    leaf.getTexture().generateMipmap();
+
     fileName = "movie";
     fileExt = ".mp4"; // ffmpeg uses the extension to determine the container type. run 'ffmpeg -formats' to see supported formats
     vidRecorder.setVideoCodec("libx264");
@@ -29,14 +34,30 @@ void ofApp::setup(){
 
     fbo.allocate(ofGetWidth(),ofGetHeight(),GL_RGBA,4);
 
+    cam.setPosition(0,0,600);
+    cam.enableOrtho();
+
 
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
+    //ofSetWindowTitle(ofToString(ofGetFrameRate()));
+
     physics->tick();
 
     updateCentroid();
+
+    for(int i =0; i < data->animations.size();i++) {
+        data->animations.at(i)->update();
+    }
+
+
+    for ( int i = 0; i < vines.size();i++)
+    {
+        vines[i].update();
+
+    }
 
     if(bRecording){
         ofPixels pix;
@@ -49,17 +70,40 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 
-    fbo.begin();
+   // fbo.begin();
 
     ofClear(255,255,255,255);
 
+    cam.begin();
+
     ofPushMatrix();
 
-    ofTranslate( width*0.5f, height*0.5f);
-    ofScale(scale, scale, scale);
 
-    ofTranslate( -centroidX, -centroidY );
+    drawSprings();
 
+    drawVines();
+
+    // draw network
+    for ( unsigned int i = 0; i < nodes.size(); i++ )
+    {
+        nodes[i].draw();
+    }
+    ofPopMatrix();
+
+    cam.end();
+
+  //  fbo.end();
+  //  fbo.draw(0,0);
+
+    ofSetColor(0);
+    ofDrawBitmapString(ofToString(ofGetFrameRate()),20,ofGetHeight()-20);
+
+}
+
+//--------------------------------------------------------------
+void ofApp::drawSprings()
+{
+    ofPushStyle();
     for ( int i = 0; i < physics->numberOfSprings(); ++i )
     {
         Spring* e = physics->getSpring(i);
@@ -68,24 +112,43 @@ void ofApp::draw(){
 
         ofSetLineWidth(10);
         ofSetColor(29,150,69);
-        ofDrawLine( a->position, b->position );
+        //ofDrawLine( a->position, b->position );
     }
-
-    // draw network
-    for ( unsigned int i = 0; i < nodes.size(); i++ )
-    {
-        nodes[i].draw();
-    }
-
-    ofPopMatrix();
-
-    fbo.end();
-    fbo.draw(0,0);
-
+    ofPopStyle();
 }
 
+//--------------------------------------------------------------
+void ofApp::drawVines()
+{
+    ofPushStyle();
+    for ( int i = 0; i < vines.size();i++)
+    {
+        vines[i].draw();
+    }
+    ofPopStyle();
+}
 
+//--------------------------------------------------------------
+void ofApp::addNode(int type)
+{
+    for(int i = 0; i < nodes.size();i++)
+    {
+        nodes.at(i).currentNode = false;
+    }
 
+    Node node(physics, data, type);
+    node.currentNode = true;
+    nodes.push_back(node);
+
+    Vine vine;
+    vine.setTexture(leaf.getTexture());
+    vine.setOrigin(node.getOrigin());
+    vine.setTarget(node.getTarget());
+    vine.grow(true);
+
+    vines.push_back(vine);
+
+}
 
 //--------------------------------------------------------------
 // calculate particles centroid & scale
@@ -116,21 +179,12 @@ void ofApp::updateCentroid()
   //else
     scale = min(width/(deltaX+300),height/(deltaY+300));
 
-    scale *= 3;
+    scale *= 2;
   //cout << "scale: " << scale << endl;
 }
 
 //--------------------------------------------------------------
-void ofApp::addNode()
-{
-    Node node(physics,data, ofRandom(0,7));
-    nodes.push_back(node);
-}
-
-//--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-//    if ( key == 'i' ) initialize();
-    if ( key == ' ' ) addNode();
 
     if(key == 'r') {
         bRecording = !bRecording;
@@ -144,6 +198,7 @@ void ofApp::keyPressed(int key){
         bRecording = false;
         vidRecorder.close();
     }
+
 }
 
 //--------------------------------------------------------------
@@ -163,7 +218,8 @@ void ofApp::mouseDragged(int x, int y, int button){
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
-    addNode();
+    int type = ofRandom(0,7);
+    addNode(type);
 }
 
 //--------------------------------------------------------------

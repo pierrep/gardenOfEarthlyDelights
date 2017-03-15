@@ -9,6 +9,7 @@
 
 #include "Node.h"
 #include "Data.h"
+#include "Vine.h"
 
 using namespace traer::physics;
 
@@ -33,11 +34,14 @@ class ofApp : public ofBaseApp {
         void gotMessage(ofMessage msg);
 
         void updateCentroid();
-        void addNode();
+        void addNode(int type);
+        void drawSprings();
+        void drawVines();
 
         shared_ptr<Data> data;
         shared_ptr<ParticleSystem> physics;
         vector<Node> nodes;
+        vector<Vine> vines;
 
         float centroidX, centroidY;
         float scale;
@@ -50,4 +54,8 @@ class ofApp : public ofBaseApp {
         string fileExt;
 
         ofFbo fbo;
+
+        ofCamera cam;
+
+        ofImage leaf;
 };

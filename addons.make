@@ -1,4 +1,4 @@
 ofxTraerPhysics
 ofxThreadedImageLoader
-ofxPngSequencePlayer
 ofxVideoRecorder
+ofxVideoBufferPlayer

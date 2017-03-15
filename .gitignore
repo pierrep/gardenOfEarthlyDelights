@@ -1,0 +1,5 @@
+gardenOfEarthlyDelights.qbs.user
+bin/gardenOfEarthlyDelights
+bin/gardenOfEarthlyDelights_debug
+bin/core
+obj/

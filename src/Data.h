@@ -3,6 +3,7 @@
 
 #include "ofMain.h"
 #include "ofxThreadedImageLoader.h"
+#include "ofxVideoBufferPlayer.h"
 
 class Data
 {
@@ -11,7 +12,8 @@ public:
     void load();
 
     vector<ofImage> categories;
-
+    //vector<shared_ptr<ofxVideoBufferPlayer>> animations;
+    vector<shared_ptr<ofVideoPlayer>> animations;
     shared_ptr<ofxThreadedImageLoader> imageLoader;
 };
 
