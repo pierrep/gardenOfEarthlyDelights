@@ -41,10 +41,13 @@ void Node::draw()
         ofSetRectMode(OF_RECTMODE_CENTER);
         if(currentNode) {
             if(data->animations.at(type)->isLoaded()) {
+                data->animations.at(type)->setPaused(false);
                 data->animations.at(type)->setSpeed(1);                
                 data->animations.at(type)->draw(p->position.x,p->position.y,NODE_SIZE*2,NODE_SIZE*2);
             }
         } else {
+            data->animations.at(type)->setPaused(true); //stop movie
+
             if(data->categories.at(type).isAllocated()) {
                 data->categories.at(type).draw(p->position,NODE_SIZE*2,NODE_SIZE*2);
                 data->animations.at(type)->setSpeed(0);
@@ -70,6 +73,8 @@ void Node::addNode()
 
     p->position.set( q->position.x + ofRandom( -1, 1 ), q->position.y + ofRandom( -1, 1 ), 0 );
 
+    data->animations.at(type)->setPaused(false);
+    data->animations.at(type)->setFrame(0);
     data->animations.at(type)->play();
 }
 

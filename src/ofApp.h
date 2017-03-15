@@ -46,7 +46,7 @@ class ofApp : public ofBaseApp {
         float centroidX, centroidY;
         float scale;
 
-        float width, height;
+        float appWidth, appHeight;
 
         ofxVideoRecorder    vidRecorder;
         bool bRecording;
@@ -58,4 +58,5 @@ class ofApp : public ofBaseApp {
         ofCamera cam;
 
         ofImage leaf;
+        ofImage sun;
 };

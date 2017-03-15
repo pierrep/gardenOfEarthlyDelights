@@ -10,8 +10,8 @@ void ofApp::setup(){
 
    // ofSetFrameRate(3);
     ofBackground(255);
-    width = ofGetWidth();
-    height = ofGetHeight();
+    appWidth = ofGetWidth();
+    appHeight = ofGetHeight();
 
     physics = shared_ptr<ParticleSystem>(new ParticleSystem(0, 0.2f));
     physics->clear();
@@ -24,6 +24,9 @@ void ofApp::setup(){
     ofDisableArbTex();
     leaf.load("leaves/leaf2.png");
     leaf.getTexture().generateMipmap();
+    //ofEnableArbTex();
+
+    sun.load("sun.png");
 
     fileName = "movie";
     fileExt = ".mp4"; // ffmpeg uses the extension to determine the container type. run 'ffmpeg -formats' to see supported formats
@@ -78,6 +81,8 @@ void ofApp::draw(){
 
     ofPushMatrix();
 
+    ofSetColor(255);
+    sun.draw(-appWidth/2.0f,40);
 
     drawSprings();
 
@@ -95,8 +100,10 @@ void ofApp::draw(){
   //  fbo.end();
   //  fbo.draw(0,0);
 
+    ofPushStyle();
     ofSetColor(0);
     ofDrawBitmapString(ofToString(ofGetFrameRate()),20,ofGetHeight()-20);
+    ofPopStyle();
 
 }
 
@@ -177,7 +184,7 @@ void ofApp::updateCentroid()
 //  if ( deltaY > deltaX )
    // scale = height/(deltaY+200);
   //else
-    scale = min(width/(deltaX+300),height/(deltaY+300));
+    scale = min(appWidth/(deltaX+300),appHeight/(deltaY+300));
 
     scale *= 2;
   //cout << "scale: " << scale << endl;
