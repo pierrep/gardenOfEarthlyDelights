@@ -43,16 +43,16 @@ void Node::draw()
             }
         } else {
 
-            //if(data->categories.at(type).isAllocated())
+            if(data->categories.at(type).isAllocated())
             {
-                //data->categories.at(type).draw(p->position,NODE_SIZE*2,NODE_SIZE*2);
-                switch(type) {
-                    case 0: ofSetColor(252,255,0);
-                        break;
-                    default: ofSetColor(255,0,255);
-                        break;
-                }
-                ofDrawCircle( p->position, NODE_SIZE/2);
+                data->categories.at(type).draw(p->position,NODE_SIZE,NODE_SIZE);
+//                switch(type) {
+//                    case 0: ofSetColor(252,255,0);
+//                        break;
+//                    default: ofSetColor(255,0,255);
+//                        break;
+//                }
+                //ofDrawCircle( p->position, NODE_SIZE/2);
                 data->animations.at(type)->setPaused(true); //stop movie
                 //data->animations.at(type)->setSpeed(0);
             }
