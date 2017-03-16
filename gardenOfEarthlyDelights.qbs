@@ -12,6 +12,8 @@ Project{
         name: { return FileInfo.baseName(path) }
 
         files: [
+            "src/SubVine.cpp",
+            "src/SubVine.h",
             'src/Data.cpp',
             'src/Data.h',
             'src/Node.cpp',

@@ -1,17 +1,17 @@
-#include "Vine.h"
+#include "SubVine.h"
 
 
 //--------------------------------------------------------------
-Vine::Vine()
+SubVine::SubVine()
 {
-    numPoints = 18;
-    maxStemWidth = 6;
-    stemNarrowness = 1.0f;
+    numPoints = 8;
+    maxStemWidth = ofRandom(3,5);
+    stemNarrowness = 0.5f;
     bDrawNormals = false;
     bFill = true;
-    targetParticle = NULL;
-    originParticle = NULL;
-    leafSize = ofRandom(0.1,0.4f);
+    target = ofVec2f::zero();
+    origin = ofVec2f::zero();
+    leafSize = 0.2f;
     if(ofRandom(0,1) < 0.5f) {
         flipCurve = 1;
     } else {
@@ -19,37 +19,33 @@ Vine::Vine()
     }
     bGrow = false;
     leafPhase = ofRandom(0,100);
-    curvature = 360.0f;
+    curvature = ofRandom(240,1200);
 }
 
 //--------------------------------------------------------------
-void Vine::setTexture(ofTexture& tex)
+void SubVine::setTexture(ofTexture& tex)
 {
     leaf = tex;
 
 }
 
 //--------------------------------------------------------------
-void Vine::update()
+void SubVine::update()
 {
-    if(originParticle) origin = originParticle->position;
-    if(targetParticle) target = targetParticle->position;
 
     if(bGrow) {
-        if(ofGetFrameNum()%5 == 0) {
-            points[0] = origin;
-            if(points.size() <= numPoints) {
+        points[0] = origin;
+        if(points.size() <= numPoints) {
 
-                for(unsigned int i = 1; i < points.size();i++) {
-                    points[i] = updatePoint(i,points[i-1]);
-                }
-
-                ofVec2f pt = updatePoint(points.size(),points.back());
-                points.push_back(pt);
-
+            for(unsigned int i = 1; i < points.size();i++) {
+                points[i] = updatePoint(i,points[i-1]);
             }
-            else bGrow = false;
+
+            ofVec2f pt = updatePoint(points.size(),points.back());
+            points.push_back(pt);
+
         }
+        else bGrow = false;
     }
     else
     { /* Update points */
@@ -60,14 +56,9 @@ void Vine::update()
        // points[points.size()-1] = target;
     }
 
-
-    for (unsigned i = 0; i < subvines.size(); i++){
-        subvines.at(i).update();
-    }
-
 }
 
-ofVec2f Vine::updatePoint(unsigned int index, ofVec2f previousPoint)
+ofVec2f SubVine::updatePoint(unsigned int index, ofVec2f previousPoint)
 {
     ofVec2f towards = (target - origin)/numPoints;
 
@@ -79,13 +70,8 @@ ofVec2f Vine::updatePoint(unsigned int index, ofVec2f previousPoint)
 }
 
 //--------------------------------------------------------------
-void Vine::draw()
+void SubVine::draw()
 {
-    //subvines
-    for (unsigned i = 0; i < subvines.size(); i++){
-        subvines.at(i).draw();
-    }
-
     ofPushStyle();
     ofSetRectMode(OF_RECTMODE_CORNER);
     ofSetColor(29,150,69);
@@ -120,7 +106,7 @@ void Vine::draw()
 }
 
 //--------------------------------------------------------------
-void Vine::drawLHS()
+void SubVine::drawLHS()
 {
     for(unsigned i = 1; i < (points.size()-1);i++)
     {
@@ -149,7 +135,7 @@ void Vine::drawLHS()
 }
 
 //--------------------------------------------------------------
-void Vine::drawRHS()
+void SubVine::drawRHS()
 {
     if(points.size() > 1) { //don't calculate normal if there's only one point
         for(unsigned i = points.size()-2; i > 0;i--)
@@ -168,13 +154,7 @@ void Vine::drawRHS()
             ofCurveVertex(pt.x,pt.y);
 
             if(i == 4) {
-                //drawLeaf(pt, normal, stemWidth);
-                if(subvines.size() == 0) {
-                    createSubVine(pt, normal*200);
-                } else {
-                    subvines[0].updateOrigin(pt);
-                    subvines[0].updateTarget(normal*200);
-                }
+                drawLeaf(pt, normal, stemWidth);
             }
             if(i == 20) {
                 drawLeaf(pt, normal, stemWidth);
@@ -183,19 +163,8 @@ void Vine::drawRHS()
     }
 }
 
-void Vine::createSubVine(ofVec2f origin, ofVec2f target)
-{
-    SubVine vine;
-    vine.setTexture(leaf);
-    vine.setOrigin(origin);
-    vine.setTarget(target);
-    vine.grow(true);
-
-    subvines.push_back(vine);
-}
-
 //--------------------------------------------------------------
-void Vine::drawLeaf(ofVec2f pt, ofVec2f normal, float stemWidth)
+void SubVine::drawLeaf(ofVec2f pt, ofVec2f normal, float stemWidth)
 {
     ofPushMatrix();
     ofPushStyle();
@@ -211,7 +180,7 @@ void Vine::drawLeaf(ofVec2f pt, ofVec2f normal, float stemWidth)
     ofRotateZ(sin(ofGetFrameNum()/50.0f + leafPhase)*10);
 
     ofEnableAlphaBlending();
-    ofSetColor(200);
+    ofSetColor(255);
     leaf.setAnchorPercent(0.5f,0);
     leaf.draw(0,0,leaf.getWidth()*leafSize*stemWidth,leaf.getHeight()*leafSize*stemWidth);
     ofDisableAlphaBlending();
@@ -221,7 +190,7 @@ void Vine::drawLeaf(ofVec2f pt, ofVec2f normal, float stemWidth)
 
 
 //--------------------------------------------------------------
-ofVec2f Vine::startPoint()
+ofVec2f SubVine::startPoint()
 {
     ofVec2f vec1 = ofVec2f(target - origin);
     ofVec2f normal = vec1.getPerpendicular();
@@ -237,7 +206,7 @@ ofVec2f Vine::startPoint()
 }
 
 //--------------------------------------------------------------
-ofVec2f Vine::endPoint()
+ofVec2f SubVine::endPoint()
 {
     ofVec2f vec2 = ofVec2f(target - origin);
     ofVec2f normal2 = vec2.getPerpendicular();
@@ -253,23 +222,22 @@ return pt;
 }
 
 //--------------------------------------------------------------
-void Vine::setTarget(Particle* p)
+void SubVine::setTarget(ofVec2f _target)
 {
-    targetParticle = p;
-
+    target = _target;
 }
 
 
 //--------------------------------------------------------------
-void Vine::setOrigin(Particle* p)
+void SubVine::setOrigin(ofVec2f _origin)
 {
-    originParticle = p;
-    points.push_back(originParticle->position);
+    origin = _origin;
+    points.push_back(origin);
 }
 
 //--------------------------------------------------------------
-void Vine::reset()
+void SubVine::reset()
 {
     points.clear();
-    points.push_back(originParticle->position);
+    points.push_back(origin);
 }

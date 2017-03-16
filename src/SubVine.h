@@ -1,16 +1,13 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxTraerPhysics.h"
-#include "SubVine.h"
 
-using namespace traer::physics;
 
-class Vine
+class SubVine
 {
 
 public:
-    Vine();
+    SubVine();
 
     void setTexture(ofTexture& tex);
     void update();
@@ -22,19 +19,17 @@ public:
     void drawLHS();
     void drawRHS();
     void reset();
-    void setOrigin(Particle* p);
-    void setTarget(Particle* p);
+    void setOrigin(ofVec2f origin);
+    void setTarget(ofVec2f target);
+    void updateOrigin(ofVec2f _origin) {origin = _origin;}
+    void updateTarget(ofVec2f _target) {target = _target;}
     void toggleNormals() {bDrawNormals = !bDrawNormals;}
     void toggleFill() {bFill = !bFill;}
     void grow(bool _bGrow) {bGrow = _bGrow;}
-    void createSubVine(ofVec2f origin, ofVec2f target);
 
     vector<ofVec2f> points;
     vector<ofVec2f> normals;
     vector<float> rand;
-    Particle* originParticle;
-    Particle* targetParticle;
-    vector<SubVine> subvines;
 
     ofVec2f target;
     ofVec2f origin;
@@ -51,5 +46,4 @@ public:
     int flipCurve;
     float leafPhase;
     float curvature;
-    bool bIsSubVine;
 };
