@@ -13,8 +13,8 @@ void Data::load()
 
     folder = "categories";
     dir.allowExt("png");
-    dir.sort();
     dir.listDir(folder);
+    dir.sort();
 
     categories.resize(dir.size());
 

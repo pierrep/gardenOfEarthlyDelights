@@ -4,7 +4,7 @@
 //--------------------------------------------------------------
 Vine::Vine()
 {
-    numPoints = 24;
+    numPoints = 18;
     maxStemWidth = 7;
     stemNarrowness = 0.3f;
     bDrawNormals = false;

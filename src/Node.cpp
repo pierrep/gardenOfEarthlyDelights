@@ -34,10 +34,6 @@ void Node::draw()
 {
     ofPushStyle();
     ofSetColor(255);
-
-    //ofDrawCircle( p->position, NODE_SIZE);
-
-    {
         ofSetRectMode(OF_RECTMODE_CENTER);
         if(currentNode) {
             if(data->animations.at(type)->isLoaded()) {
@@ -45,14 +41,14 @@ void Node::draw()
                 data->animations.at(type)->draw(p->position.x,p->position.y,NODE_SIZE*2,NODE_SIZE*2);
             }
         } else {
-            if(data->categories.at(type).isAllocated()) {
-                data->categories.at(type).draw(p->position,NODE_SIZE*2,NODE_SIZE*2);
+            //if(data->categories.at(type).isAllocated())
+            {
+                //data->categories.at(type).draw(p->position,NODE_SIZE*2,NODE_SIZE*2);
+                ofSetColor(255,0,0);
+                ofDrawCircle( p->position, NODE_SIZE/2);
                 data->animations.at(type)->setSpeed(0);
             }
         }
-
-
-    }
     ofPopStyle();
 
 }

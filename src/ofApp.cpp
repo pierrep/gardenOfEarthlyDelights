@@ -12,12 +12,13 @@ void ofApp::setup(){
     ofBackground(255);
     width = ofGetWidth();
     height = ofGetHeight();
+    bShowFps = false;
 
     physics = shared_ptr<ParticleSystem>(new ParticleSystem(0, 0.2f));
     physics->clear();
 
 
-    ofSetCircleResolution(30);
+    ofSetCircleResolution(40);
     data = shared_ptr<Data>(new Data());
     data->load();
 
@@ -70,7 +71,7 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 
-   // fbo.begin();
+    //fbo.begin();
 
     ofClear(255,255,255,255);
 
@@ -79,11 +80,10 @@ void ofApp::draw(){
     ofPushMatrix();
 
 
-    drawSprings();
+    //drawSprings();
 
     drawVines();
 
-    // draw network
     for ( unsigned int i = 0; i < nodes.size(); i++ )
     {
         nodes[i].draw();
@@ -92,12 +92,15 @@ void ofApp::draw(){
 
     cam.end();
 
-  //  fbo.end();
-  //  fbo.draw(0,0);
-
-    ofSetColor(0);
-    ofDrawBitmapString(ofToString(ofGetFrameRate()),20,ofGetHeight()-20);
-
+    //fbo.end();
+    //fbo.draw(0,0);
+    if(bShowFps) {
+        ofPushStyle();
+        ofSetColor(0);
+        ofDrawBitmapString(ofToString(ofGetFrameRate()),20,ofGetHeight()-20);
+        ofDrawBitmapString(ofToString(nodes.size()) +" Nodes",100,ofGetHeight()-20);
+        ofPopStyle();
+    }
 }
 
 //--------------------------------------------------------------
@@ -112,7 +115,7 @@ void ofApp::drawSprings()
 
         ofSetLineWidth(10);
         ofSetColor(29,150,69);
-        //ofDrawLine( a->position, b->position );
+        ofDrawLine( a->position, b->position );
     }
     ofPopStyle();
 }
@@ -197,6 +200,9 @@ void ofApp::keyPressed(int key){
     if(key=='c'){
         bRecording = false;
         vidRecorder.close();
+    }
+    if(key =='f') {
+        bShowFps = !bShowFps;
     }
 
 }

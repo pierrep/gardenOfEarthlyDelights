@@ -58,4 +58,6 @@ class ofApp : public ofBaseApp {
         ofCamera cam;
 
         ofImage leaf;
+
+        bool bShowFps;
 };
