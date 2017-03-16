@@ -3,9 +3,9 @@
 
 //========================================================================
 int main( ){
-
     //ofSetLogLevel(OF_LOG_VERBOSE);
-    ofSetupOpenGL(1920+1600,1200,OF_GAME_MODE);			// <-------- setup the GL context
+    //ofSetupOpenGL(1920+1600,1200,OF_GAME_MODE);
+    ofSetupOpenGL(1600,900,OF_GAME_MODE);
 
 //    ofGLFWWindowSettings settings;
 //    settings.width = 1600;

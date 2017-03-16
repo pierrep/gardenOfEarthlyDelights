@@ -19,6 +19,7 @@ Vine::Vine()
     }
     bGrow = false;
     leafPhase = ofRandom(0,100);
+    curvature = 360.0f;
 }
 
 //--------------------------------------------------------------
@@ -42,12 +43,6 @@ void Vine::update()
                 points[i] = updatePoint(i,points[i-1]);
             }
 
-            /*
-            ofVec2f towards = (target - origin)/numPoints;
-            ofVec2f pt = points.back() + towards;
-            float angle = sin((float)points.size()/2.0f)*(720.0f/(float)numPoints);
-            pt = pt.getRotated(angle,points.back());
-            */
             ofVec2f pt = updatePoint(points.size(),points.back());
             points.push_back(pt);
 
@@ -70,7 +65,7 @@ ofVec2f Vine::updatePoint(unsigned int index, ofVec2f previousPoint)
     ofVec2f towards = (target - origin)/numPoints;
 
     ofVec2f pt = previousPoint + towards;
-    float angle = sin(flipCurve*(float)index/2.0f)*(720.0f/(float)numPoints);
+    float angle = sin(flipCurve*(float)index/2.0f)*(curvature/(float)numPoints);
 
     pt = pt.getRotated(angle,previousPoint);
     return pt;

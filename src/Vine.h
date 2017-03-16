@@ -47,4 +47,5 @@ public:
     bool bGrow;
     int flipCurve;
     float leafPhase;
+    float curvature;
 };
