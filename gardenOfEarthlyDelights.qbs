@@ -12,12 +12,12 @@ Project{
         name: { return FileInfo.baseName(path) }
 
         files: [
-            "src/SubVine.cpp",
-            "src/SubVine.h",
             'src/Data.cpp',
             'src/Data.h',
             'src/Node.cpp',
             'src/Node.h',
+            'src/SubVine.cpp',
+            'src/SubVine.h',
             'src/Vine.cpp',
             'src/Vine.h',
             'src/main.cpp',
@@ -30,6 +30,9 @@ Project{
             'ofxThreadedImageLoader',
             'ofxVideoRecorder',
             'ofxVideoBufferPlayer',
+            'ofxTweener',
+            'ofxXmlSettings',
+            'ofxOsc',
         ]
 
         // additional flags for the project. the of module sets some

@@ -43,6 +43,16 @@ void Data::load()
             animations.back()->load(folder +"/" + dir.getName(i));
         //}
     }
+ 
+    folder = "sounds";
+    dir.allowExt("png");
+    dir.listDir(folder);
+    dir.sort();
+    
+    for(unsigned int i = 0;i < dir.size();i++){
+        string name = folder + "/" + dir.getName(i);
+        sounds->loadFromDisk(categories[i],name);
+    }
 
     //animations[0].setLoopInterval(85,120); // habitat fps 15
     //animations[0]->setLoopInterval(10,27); // travel fps 5

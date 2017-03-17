@@ -16,6 +16,7 @@ public:
     vector<shared_ptr<ofVideoPlayer>> animations;
     shared_ptr<ofxThreadedImageLoader> imageLoader;
 
+    vector<ofSoundPlayer> sounds;
     float appWidth, appHeight;
 };
 

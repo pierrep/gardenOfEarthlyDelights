@@ -2,3 +2,6 @@ ofxTraerPhysics
 ofxThreadedImageLoader
 ofxVideoRecorder
 ofxVideoBufferPlayer
+ofxTweener
+ofxXmlSettings
+ofxOsc

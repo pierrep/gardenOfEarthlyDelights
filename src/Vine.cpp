@@ -20,6 +20,7 @@ Vine::Vine()
     bGrow = false;
     leafPhase = ofRandom(0,100);
     curvature = 360.0f;
+    subvineLength = ofRandom(150,200);
 }
 
 //--------------------------------------------------------------
@@ -170,10 +171,10 @@ void Vine::drawRHS()
             if(i == 4) {
                 //drawLeaf(pt, normal, stemWidth);
                 if(subvines.size() == 0) {
-                    createSubVine(pt, normal*200);
+                    createSubVine(pt + normal*5, normal*subvineLength);
                 } else {
-                    subvines[0].updateOrigin(pt);
-                    subvines[0].updateTarget(normal*200);
+                    subvines[0].updateOrigin(pt + normal*5);
+                    subvines[0].updateTarget(normal*subvineLength);
                 }
             }
             if(i == 20) {

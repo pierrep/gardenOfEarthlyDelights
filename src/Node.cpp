@@ -7,13 +7,14 @@
 #define SPACER_STRENGTH 2000
 
 
-Node::Node(shared_ptr<ParticleSystem> _physics, shared_ptr<Data> _data, int _type)
+Node::Node(shared_ptr<ParticleSystem> _physics, shared_ptr<Data> _data, int _type, string _text)
 {
     physics = _physics;
     data = _data;
     type = _type;
-    appWidth = ofGetWidth();
-    appHeight = ofGetHeight();
+    text = _text;
+    appWidth = data->appWidth;
+    appHeight = data->appHeight;
     currentNode = false;
 
     addNode();
@@ -83,9 +84,9 @@ void Node::addNode()
 //--------------------------------------------------------------
 bool Node::inBounds(Particle* a)
 {
-
-    if((a->position.x < (appWidth/2-50)) && (a->position.x > (-appWidth/2+50))) {
-        if((a->position.y < (appHeight/2-50)) && (a->position.y > (-appHeight/2+50))) {
+    const int border = 200;
+    if((a->position.x < (appWidth/2-border)) && (a->position.x > (-appWidth/2+border))) {
+        if((a->position.y < (appHeight/2-border)) && (a->position.y > (-appHeight/2+border))) {
             return true;
         }
     }

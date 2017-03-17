@@ -52,4 +52,5 @@ public:
     float leafPhase;
     float curvature;
     bool bIsSubVine;
+    int subvineLength;
 };

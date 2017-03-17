@@ -10,7 +10,7 @@ using namespace traer::physics;
 class Node
 {
 public:
-    Node(shared_ptr<ParticleSystem> _physics, shared_ptr<Data> _data, int _type);
+    Node(shared_ptr<ParticleSystem> _physics, shared_ptr<Data> _data, int _type, string _text);
     void setup();
     void update();
     void draw();
@@ -20,6 +20,7 @@ public:
     bool inBounds(Particle* a);
     Particle* getOrigin() {return q;}
     Particle* getTarget() {return p;}
+    const string getText() {return text;}
 
     bool currentNode;
 
@@ -33,9 +34,11 @@ private:
     ofVec2f end;
 
     shared_ptr<Data> data;
-    int type;
 
     int appWidth, appHeight;
+
+    int type;
+    string text;
 
 };
 
