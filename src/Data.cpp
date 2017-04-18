@@ -8,8 +8,8 @@ Data::Data()
 
 void Data::load()
 {
-    appWidth = ofGetWidth();
-    appHeight = ofGetHeight();
+    appWidth = 1920;
+    appHeight = 1200;
 
     ofDirectory dir;
     string folder;
@@ -42,6 +42,20 @@ void Data::load()
             //animations.back()->load(folder +"/" + dir.getName(i));
             animations.back()->load(folder +"/" + dir.getName(i));
         //}
+    }
+
+    folder = "sounds";
+    dir.allowExt("wav");
+    dir.allowExt("mp3");
+    dir.listDir(folder);
+    dir.sort();
+
+    sounds.resize(dir.size());
+
+    for(unsigned int i = 0;i < dir.size();i++){
+        string name = folder + "/" + dir.getName(i);
+        sounds[i].load(name);
+        sounds[i].setLoop(OF_LOOP_NORMAL);
     }
 
     //animations[0].setLoopInterval(85,120); // habitat fps 15

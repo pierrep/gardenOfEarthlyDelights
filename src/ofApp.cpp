@@ -61,7 +61,7 @@ void ofApp::setup(){
 
     state = ACTIVE;
     active_time = 1000*30;
-    idle_time = 1000*20;
+    idle_time = 1000*10;
     max_nodes = 40;
 }
 
@@ -87,12 +87,24 @@ void ofApp::update(){
         if(curTime - prevTime > idle_time)
         {
             prevTime = curTime;
-            for(int i = 0; i < nodes.size();i++)
-            {
-                nodes.at(i).currentNode = false;
+            if(nodes.size() > 0) {
+                for(int i = 0; i < nodes.size();i++)
+                {
+                    nodes.at(i).currentNode = false;
+                }
+                unsigned int idx = ofRandom(0,nodes.size());
+
+                nodes.at(idx).currentNode = true;
+                for(int i = 0; i < data->sounds.size();i++)
+                {
+                    data->sounds[i].stop();
+                }
+                int type = nodes.at(idx).getType();
+                if(data->sounds[type].isLoaded()) {
+
+                    data->sounds[type].play();
+                }
             }
-            unsigned int idx = ofRandom(0,nodes.size());
-            nodes.at(idx).currentNode = true;
 
         }
     }
@@ -128,6 +140,7 @@ void ofApp::update(){
 
     physics->tick();
     updateOsc();
+    //ofSoundUpdate();
 
     for(int i =0; i < data->animations.size();i++) {
         data->animations.at(i)->update();
@@ -158,15 +171,22 @@ void ofApp::draw(){
     ofPushMatrix();
 
     ofSetColor(255);
-    sun.draw(-data->appWidth/2.0f,40);
+  //  sun.draw(-data->appWidth/2.0f,40);
 
     //drawSprings();
 
     drawVines();
 
+    unsigned int index = 0;
     for ( unsigned int i = 0; i < nodes.size(); i++ )
     {
         nodes[i].draw();
+        if(nodes[i].currentNode) {
+            index = i;
+        }
+    }
+    if(nodes.size()>1) {
+        nodes[index].draw();
     }
 
     ofPopMatrix();
@@ -194,10 +214,11 @@ void ofApp::draw(){
             curState = "ACTIVE";
         } else if (state == IDLE) {
             curState = "IDLE";
+        }
 
-        ofDrawBitmapString(curState,ofGetWidth()-150,ofGetHeight()-20);}
-        ofDrawBitmapString(ofToString(ofGetFrameRate()),ofGetWidth()-100,ofGetHeight()-20);
-        ofDrawBitmapString(ofToString(nodes.size()) +" Nodes",ofGetWidth()-60,ofGetHeight()-20);
+        ofDrawBitmapString(curState,ofGetWidth()-200,ofGetHeight()-20);
+        ofDrawBitmapString(ofToString(ofGetFrameRate()),ofGetWidth()-170,ofGetHeight()-20);
+        ofDrawBitmapString(ofToString(nodes.size()) +" Nodes",ofGetWidth()-100,ofGetHeight()-20);
         ofPopStyle();
     }
 
@@ -263,6 +284,17 @@ void ofApp::addNode(int type, string text, bool addtoXml)
 
     prevTime = curTime = ofGetElapsedTimeMillis();
     state = ACTIVE;
+
+    for(int i = 0; i < data->sounds.size();i++)
+    {
+        data->sounds[i].stop();
+    }
+    if(data->sounds[type].isLoaded()) {
+        if(!(data->sounds[type].isPlaying())) {
+            data->sounds[type].play();
+        }
+    }
+
 }
 
 void ofApp::updateOsc()

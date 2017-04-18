@@ -21,6 +21,7 @@ public:
     Particle* getOrigin() {return q;}
     Particle* getTarget() {return p;}
     const string getText() {return text;}
+    const int getType() {return type;}
 
     bool currentNode;
 

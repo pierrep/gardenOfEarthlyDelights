@@ -73,4 +73,7 @@ class ofApp : public ofBaseApp {
         bool bLoadXml;
         int numNodes;
         int nodeIndex;
+        unsigned int max_nodes;
+
+
 };
