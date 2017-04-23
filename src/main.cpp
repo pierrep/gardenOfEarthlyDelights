@@ -4,7 +4,7 @@
 //========================================================================
 int main( ){
     //ofSetLogLevel(OF_LOG_VERBOSE);
-    ofSetupOpenGL(1920,1200,OF_GAME_MODE);
+    ofSetupOpenGL(1920,1080,OF_GAME_MODE);
     //ofSetupOpenGL(1600,900,OF_GAME_MODE);
 
 //    ofGLFWWindowSettings settings;

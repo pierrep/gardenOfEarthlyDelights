@@ -5,3 +5,4 @@ ofxVideoBufferPlayer
 ofxTweener
 ofxXmlSettings
 ofxOsc
+ofxTileSaver

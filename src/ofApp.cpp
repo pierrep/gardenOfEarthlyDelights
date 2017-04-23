@@ -28,9 +28,11 @@ void ofApp::setup(){
     fileName = "movie";
     fileExt = ".mp4"; // ffmpeg uses the extension to determine the container type. run 'ffmpeg -formats' to see supported formats
     vidRecorder.setVideoCodec("libx264");
-    vidRecorder.setVideoBitrate("800k");
+    vidRecorder.setVideoBitrate("1200k");
     vidRecorder.setOutputPixelFormat("yuv420p");
     bRecording = false;
+    tileSaver.init(10,20,true);
+    bSaveBigImage = false;
 
     fbo.allocate(ofGetWidth(),ofGetHeight(),GL_RGBA,4);
 
@@ -119,8 +121,9 @@ void ofApp::update(){
     }
 
 
+
     if(bLoadXml){
-        if(ofGetFrameNum()%60 == 0) {
+        if(ofGetFrameNum()%120 == 0) { //second inerval between node insertions
             if(numNodes > 0) {
                 //the last argument of getValue can be used to specify
                 //which tag out of multiple tags you are refering to.
@@ -140,7 +143,6 @@ void ofApp::update(){
 
     physics->tick();
     updateOsc();
-    //ofSoundUpdate();
 
     for(int i =0; i < data->animations.size();i++) {
         data->animations.at(i)->update();
@@ -162,14 +164,24 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 
-    //fbo.begin();
+    if(bRecording){
+        fbo.begin();
+    }
 
     ofClear(255,255,255,255);
 
     cam.begin();
 
-    ofPushMatrix();
+    if(bSaveBigImage) {
+        tileSaver.begin();
+        tileSaver.setCameraData(cam.getPosition(), ofVec3f::zero(), cam.getUpDir());
+        ofMatrix4x4 mat = cam.getProjectionMatrix();
+        double left, right, bottom, top, nearZ, farZ;
+        mat.getOrtho(left,right,bottom,top, nearZ, farZ);
+        tileSaver.getCurFrustum().set(left, right, bottom, top, nearZ, farZ);
+    }
 
+    ofPushMatrix();
     ofSetColor(255);
   //  sun.draw(-data->appWidth/2.0f,40);
 
@@ -189,6 +201,11 @@ void ofApp::draw(){
         nodes[index].draw();
     }
 
+
+    if(bSaveBigImage) {
+        tileSaver.end();
+    }
+
     ofPopMatrix();
 
     cam.end();
@@ -204,8 +221,11 @@ void ofApp::draw(){
     }
     ofPopStyle();
 
-    //fbo.end();
-    //fbo.draw(0,0);
+    if(bRecording){
+        fbo.end();
+        fbo.draw(0,0);
+    }
+
     if(bShowFps) {
         ofPushStyle();
         ofSetColor(0);
@@ -332,7 +352,12 @@ void ofApp::keyPressed(int key){
     if(key =='f') {
         bShowFps = !bShowFps;
     }
-
+    if(key == 'i') {
+        bSaveBigImage = !bSaveBigImage;
+    }
+    if(key =='s') {
+        tileSaver.finish("frame_" + ofToString(ofGetFrameNum()) + "_high.png", false);
+    }
 }
 
 //--------------------------------------------------------------

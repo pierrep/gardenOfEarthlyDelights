@@ -7,11 +7,13 @@
 #include "ofxTraerPhysics.h"
 #include "ofxVideoRecorder.h"
 #include "ofxOsc.h"
+#include "ofxTileSaver.h"
+#include "ofxXmlSettings.h"
 
 #include "Node.h"
 #include "Data.h"
 #include "Vine.h"
-#include "ofxXmlSettings.h"
+
 
 using namespace traer::physics;
 
@@ -53,10 +55,13 @@ class ofApp : public ofBaseApp {
         vector<Node> nodes;
         vector<Vine> vines;
 
+        /* recording */
         ofxVideoRecorder    vidRecorder;
         bool bRecording;
         string fileName;
         string fileExt;
+        ofxTileSaver tileSaver;
+        bool bSaveBigImage;
 
         ofFbo fbo;
         ofCamera cam;

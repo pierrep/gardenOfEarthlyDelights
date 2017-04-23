@@ -41,21 +41,18 @@ void Node::draw()
                 data->animations.at(type)->setPaused(false);
                 data->animations.at(type)->setSpeed(1);                
                 data->animations.at(type)->draw(p->position.x,p->position.y,NODE_SIZE*2,NODE_SIZE*2);
-            }
+            }            
+            /*
+            if(data->categories.at(type).isAllocated())
+            {
+                data->categories.at(type).draw(p->position,NODE_SIZE,NODE_SIZE);
+            }*/
         } else {
 
             if(data->categories.at(type).isAllocated())
             {
                 data->categories.at(type).draw(p->position,NODE_SIZE,NODE_SIZE);
-//                switch(type) {
-//                    case 0: ofSetColor(252,255,0);
-//                        break;
-//                    default: ofSetColor(255,0,255);
-//                        break;
-//                }
-                //ofDrawCircle( p->position, NODE_SIZE/2);
                 data->animations.at(type)->setPaused(true); //stop movie
-                //data->animations.at(type)->setSpeed(0);
             }
         }
     ofPopStyle();

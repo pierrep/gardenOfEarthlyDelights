@@ -8,8 +8,8 @@ Data::Data()
 
 void Data::load()
 {
-    appWidth = 1920;
-    appHeight = 1200;
+    appWidth = ofGetWidth();
+    appHeight = ofGetHeight();
 
     ofDirectory dir;
     string folder;

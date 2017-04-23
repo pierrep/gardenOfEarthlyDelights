@@ -33,6 +33,7 @@ Project{
             'ofxTweener',
             'ofxXmlSettings',
             'ofxOsc',
+            'ofxTileSaver',
         ]
 
         // additional flags for the project. the of module sets some
